@@ -75,7 +75,7 @@ bigdata-assignment2/
 
 ### Key Relationships
 
-```mermaid
+```bash
 Users ──perform──► Events ──reference──► Products
   │                      │
   └──receive──► Messages ──part_of──► Campaigns
@@ -291,13 +291,6 @@ Search: "vacuum" → Products in "appliances.environment.vacuum"
 
 ---
 
-## References
-
-1. Uzunbayir, S. "Relational Database and NoSQL Inspections using MongoDB and Neo4j on a Big Data Application," 2022
-2. REES46 Marketing Platform Dataset
-3. MongoDB Data Modeling Guide
-4. Neo4j Graph Modeling Documentation
-
 ---
 
 ## Author Notes
@@ -308,7 +301,5 @@ This project demonstrates data engineering skills including:
 - ETL pipeline development
 - Performance optimization
 - Comparative system analysis
-
-The architecture mirrors real-world e-commerce analytics platforms used by companies like Amazon, Shopify, and Netflix.
 
 ---
