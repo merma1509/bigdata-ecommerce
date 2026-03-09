@@ -36,7 +36,6 @@ fi
 
 # Build and start containers
 echo "Building and starting secure containers..."
-cd docker
 docker-compose up --build -d || echo "Docker build failed, but continuing..."
 
 # Wait for databases to be ready
@@ -45,7 +44,6 @@ sleep 20
 
 # Install Python dependencies using UV (much faster than pip)
 echo "Installing Python dependencies with UV..."
-cd ..
 if [ -f "pyproject.toml" ]; then
     export UV_LINK_MODE=copy
     uv sync --dev

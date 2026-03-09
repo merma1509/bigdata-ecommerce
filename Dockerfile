@@ -15,7 +15,7 @@ COPY pyproject.toml .
 COPY README.md .
 
 # Install Python dependencies with pip
-RUN pip install --no-cache-dir -e .
+# RUN pip install --no-cache-dir -e
 
 # Copy application code
 COPY . .

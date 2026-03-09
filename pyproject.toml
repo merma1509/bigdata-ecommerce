@@ -30,7 +30,8 @@ dev = [
 ]
 
 # Benchmarking 
-hyperfine>=1.16.0
+# Note: Using custom benchmarking tool instead of hyperfine
+# hyperfine>=1.16.0
 
 [build-system]
 requires = ["hatchling"]

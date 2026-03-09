@@ -47,8 +47,7 @@ bigdata-assignment2/
 │   └── benchmarking/                          # Performance testing
 │       ├── run_benchmarks.py
 │       └── analyze_results.py
-├── docker/
-│   └── docker-compose.yml                     # Containerized database setup
+├── docker-compose.yml                         # Containerized database setup
 ├── output/
 │   ├── screenshots/                           # Query execution screenshots
 │   ├── benchmarks/                            # Performance measurement data
