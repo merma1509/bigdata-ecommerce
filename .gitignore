@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Data files (too large for git)
+data/raw/*.csv
+data/processed/*.csv
+
+# Output and results
+output/
+screenshots/
+results/
+benchmarks/
+docs/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Environment
+.env
+venv/
+
+# Security - NEVER commit secrets
+secrets/
+*.pem
+*.key
+*.crt
+.env.local
+.env.production
+
+# uv
+uv.lock
+uv-x86_64-unknown-linux-gnu/
