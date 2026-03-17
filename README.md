@@ -291,8 +291,6 @@ Search: "vacuum" → Products in "appliances.environment.vacuum"
 
 ---
 
----
-
 ## Author Notes
 
 This project demonstrates data engineering skills including:

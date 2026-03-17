@@ -16,6 +16,9 @@ screenshots/
 results/
 benchmarks/
 docs/
+hyperfine_results.json
+hyperfine_report.md
+notebooks/
 
 # Logs
 *.log
@@ -47,3 +50,8 @@ secrets/
 # uv
 uv.lock
 uv-x86_64-unknown-linux-gnu/
+
+# Benchmark results
+benchmark_results.json
+performance_chart.png
+
