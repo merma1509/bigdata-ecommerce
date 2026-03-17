@@ -8,14 +8,15 @@ echo "=== Neo4j Data Loading ==="
 # Check if Neo4j is running
 if ! docker ps | grep -q "bigdata-neo4j"; then
     echo "Starting Neo4j container..."
-    cd docker
-    docker-compose up -d neo4j
-    cd ..
+    docker compose up -d neo4j
     sleep 15
 fi
 
+# Load environment variables
+source .env
+
 # Run the Python loading script
 echo "Loading data into Neo4j..."
-python scripts/ingestion/load_data_graph.py
+python scripts/load_data_graph.py
 
 echo "Neo4j data loading completed!"
