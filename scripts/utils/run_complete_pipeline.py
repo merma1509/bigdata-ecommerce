@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-Complete Data Pipeline Orchestrator
-Cleans raw data and loads into PostgreSQL, MongoDB, and Neo4j
-"""
+"""Complete Data Pipeline Orchestrator
+Cleans raw data and loads into PostgreSQL, MongoDB, and Neo4j"""
 
 import os
 import sys
@@ -23,7 +21,7 @@ class DataPipelineOrchestrator:
         self.processed_dir.mkdir(exist_ok=True)
         
         print("=" * 80)
-        print("🚀 BIG DATA STORAGE & RETRIEVAL - COMPLETE PIPELINE")
+        print("BIG DATA STORAGE & RETRIEVAL")
         print("=" * 80)
         print(f"Project Root: {self.project_root}")
         print(f"Raw Data Dir: {self.raw_dir}")
@@ -32,7 +30,7 @@ class DataPipelineOrchestrator:
     
     def check_prerequisites(self):
         """Check if all prerequisites are met"""
-        print("\n🔍 CHECKING PREREQUISITES...")
+        print("\nCHECKING PREREQUISITES...")
         
         # Check if raw data exists
         required_files = [
@@ -50,20 +48,20 @@ class DataPipelineOrchestrator:
                 missing_files.append(str(file_path))
         
         if missing_files:
-            print(f"❌ MISSING RAW DATA FILES:")
+            print(f"MISSING RAW DATA FILES:")
             for file in missing_files:
                 print(f"   - {file}")
             print("\nPlease ensure all raw CSV files are in the data/raw/ directory.")
             return False
         
-        print("✅ All raw data files found!")
+        print("All raw data files found!")
         
         # Check if Python is available
         try:
             result = subprocess.run([sys.executable, "--version"], capture_output=True, text=True)
-            print(f"✅ Python: {result.stdout.strip()}")
+            print(f"Python: {result.stdout.strip()}")
         except Exception as e:
-            print(f"❌ Python not available: {e}")
+            print(f"Python not available: {e}")
             return False
         
         # Check if required Python packages are available
@@ -72,14 +70,27 @@ class DataPipelineOrchestrator:
         
         for package in required_packages:
             try:
-                __import__(package)
-                print(f"✅ {package} available")
+                # Special handling for psycopg2 vs psycopg2-binary
+                if package == 'psycopg2':
+                    __import__('psycopg2')  # Try psycopg2 first
+                else:
+                    __import__(package)
+                print(f"{package} available")
             except ImportError:
-                missing_packages.append(package)
-                print(f"❌ {package} NOT available")
+                # For psycopg2, try psycopg2-binary as fallback
+                if package == 'psycopg2':
+                    try:
+                        __import__('psycopg2_binary')
+                        print(f"{package} available (via psycopg2-binary)")
+                    except ImportError:
+                        missing_packages.append(package)
+                        print(f"{package} NOT available")
+                else:
+                    missing_packages.append(package)
+                    print(f"{package} NOT available")
         
         if missing_packages:
-            print(f"\n❌ MISSING PACKAGES: {', '.join(missing_packages)}")
+            print(f"\nMISSING PACKAGES: {', '.join(missing_packages)}")
             print("Install with: pip install " + " ".join(missing_packages))
             return False
         
@@ -87,18 +98,18 @@ class DataPipelineOrchestrator:
     
     def run_data_cleaning(self):
         """Run data cleaning script"""
-        print("\n🧹 STEP 1: DATA CLEANING")
+        print("\nSTEP 1: DATA CLEANING")
         print("-" * 50)
         
         clean_script = self.scripts_dir / "data" / "clean_data.py"
         
         if not clean_script.exists():
-            print(f"❌ Data cleaning script not found: {clean_script}")
+            print(f"Data cleaning script not found: {clean_script}")
             return False
         
         try:
             start_time = time.time()
-            print(f"🔄 Running: {clean_script}")
+            print(f"Running: {clean_script}")
             
             # Change to project root directory for relative paths
             result = subprocess.run(
@@ -109,20 +120,20 @@ class DataPipelineOrchestrator:
             )
             
             if result.returncode != 0:
-                print(f"❌ Data cleaning failed!")
+                print(f"Data cleaning failed!")
                 print(f"Error: {result.stderr}")
                 return False
             
             end_time = time.time()
             duration = end_time - start_time
             
-            print("✅ Data cleaning completed successfully!")
-            print(f"⏱️  Duration: {duration:.2f} seconds")
-            print(f"📁 Cleaned data saved to: {self.processed_dir}")
+            print("Data cleaning completed successfully!")
+            print(f" Duration: {duration:.2f} seconds")
+            print(f"Cleaned data saved to: {self.processed_dir}")
             
             # List cleaned files
             cleaned_files = list(self.processed_dir.glob("*_cleaned.csv"))
-            print(f"📊 Generated {len(cleaned_files)} cleaned files:")
+            print(f"Generated {len(cleaned_files)} cleaned files:")
             for file in cleaned_files:
                 size = file.stat().st_size / 1024 / 1024  # MB
                 print(f"   - {file.name} ({size:.1f} MB)")
@@ -130,23 +141,23 @@ class DataPipelineOrchestrator:
             return True
             
         except Exception as e:
-            print(f"❌ Error running data cleaning: {e}")
+            print(f"Error running data cleaning: {e}")
             return False
     
     def run_database_loading(self, db_name, script_name):
         """Run database loading script"""
-        print(f"\n🗄️  STEP {self.db_step_counter}: LOADING {db_name.upper()}")
+        print(f"\nSTEP {self.db_step_counter}: LOADING {db_name.upper()}")
         print("-" * 50)
         
         load_script = self.scripts_dir / "loading" / script_name
         
         if not load_script.exists():
-            print(f"❌ {db_name} loading script not found: {load_script}")
+            print(f"{db_name} loading script not found: {load_script}")
             return False
         
         try:
             start_time = time.time()
-            print(f"🔄 Running: {load_script}")
+            print(f"Running: {load_script}")
             
             # Change to project root directory for relative paths
             result = subprocess.run(
@@ -157,19 +168,19 @@ class DataPipelineOrchestrator:
             )
             
             if result.returncode != 0:
-                print(f"❌ {db_name} loading failed!")
+                print(f"{db_name} loading failed!")
                 print(f"Error: {result.stderr}")
                 return False
             
             end_time = time.time()
             duration = end_time - start_time
             
-            print(f"✅ {db_name} loading completed successfully!")
-            print(f"⏱️  Duration: {duration:.2f} seconds")
+            print(f"{db_name} loading completed successfully!")
+            print(f"Duration: {duration:.2f} seconds")
             
             # Show output summary if available
             if result.stdout:
-                print("📊 Loading Summary:")
+                print("Loading Summary:")
                 # Extract summary lines from output
                 lines = result.stdout.split('\n')
                 summary_lines = [line for line in lines if 'records' in line.lower() or 'documents' in line.lower() or 'nodes' in line.lower()]
@@ -180,12 +191,12 @@ class DataPipelineOrchestrator:
             return True
             
         except Exception as e:
-            print(f"❌ Error running {db_name} loading: {e}")
+            print(f"Error running {db_name} loading: {e}")
             return False
     
     def run_all_database_loading(self):
         """Run all database loading scripts"""
-        print("\n🗄️  STEP 2-4: DATABASE LOADING")
+        print("\nSTEP 2-4: DATABASE LOADING")
         print("=" * 50)
         
         self.db_step_counter = 2
@@ -198,7 +209,7 @@ class DataPipelineOrchestrator:
         
         results = {}
         for db_name, script_name in databases:
-            print(f"\n🎯 Loading {db_name}...")
+            print(f"\nLoading {db_name}...")
             results[db_name] = self.run_database_loading(db_name, script_name)
             self.db_step_counter += 1
             
@@ -210,36 +221,36 @@ class DataPipelineOrchestrator:
     def generate_final_report(self, results):
         """Generate final pipeline report"""
         print("\n" + "=" * 80)
-        print("📋 FINAL PIPELINE REPORT")
+        print("FINAL PIPELINE REPORT")
         print("=" * 80)
         
         # Data cleaning status
-        print("🧹 DATA CLEANING:")
-        print("   ✅ COMPLETED - All datasets cleaned and optimized")
+        print("DATA CLEANING:")
+        print("   COMPLETED - All datasets cleaned and optimized")
         
         # Database loading status
-        print("\n🗄️  DATABASE LOADING:")
+        print("\nDATABASE LOADING:")
         for db_name, success in results.items():
-            status = "✅ COMPLETED" if success else "❌ FAILED"
+            status = "COMPLETED" if success else "FAILED"
             print(f"   {db_name:<12} {status}")
         
         # Summary statistics
-        print("\n📊 SUMMARY STATISTICS:")
+        print("\nSUMMARY STATISTICS:")
         try:
             cleaned_files = list(self.processed_dir.glob("*_cleaned.csv"))
             total_size = sum(f.stat().st_size for f in cleaned_files) / 1024 / 1024  # MB
-            print(f"   📁 Processed Files: {len(cleaned_files)}")
-            print(f"   💾 Total Size: {total_size:.1f} MB")
+            print(f"   Processed Files: {len(cleaned_files)}")
+            print(f"   Total Size: {total_size:.1f} MB")
             
             # Count successful databases
             successful = sum(1 for success in results.values() if success)
-            print(f"   🗄️  Databases Loaded: {successful}/3")
+            print(f"   Databases Loaded: {successful}/3")
             
         except Exception as e:
-            print(f"   ⚠️  Could not calculate statistics: {e}")
+            print(f"   Could not calculate statistics: {e}")
         
         # Next steps
-        print("\n🚀 NEXT STEPS:")
+        print("\nNEXT STEPS:")
         print("   1. Verify data in each database using provided query tools")
         print("   2. Run performance benchmarks: cd scripts && ./run_benchmark.sh")
         print("   3. Review data models in OPTIMAL_DATA_MODELS_REPORT.md")
@@ -248,10 +259,10 @@ class DataPipelineOrchestrator:
         # Overall status
         all_success = all(results.values())
         if all_success:
-            print("\n🎉 PIPELINE COMPLETED SUCCESSFULLY!")
+            print("\nPIPELINE COMPLETED SUCCESSFULLY!")
             print("   All data cleaned and loaded into PostgreSQL, MongoDB, and Neo4j")
         else:
-            print("\n⚠️  PIPELINE COMPLETED WITH WARNINGS!")
+            print("\nPIPELINE COMPLETED WITH WARNINGS!")
             print("   Some database loading failed. Check error messages above.")
         
         print("=" * 80)
@@ -265,12 +276,12 @@ class DataPipelineOrchestrator:
         try:
             # Step 1: Check prerequisites
             if not self.check_prerequisites():
-                print("\n❌ PIPELINE ABORTED: Prerequisites not met!")
+                print("\nPIPELINE ABORTED: Prerequisites not met!")
                 return False
             
             # Step 2: Run data cleaning
             if not self.run_data_cleaning():
-                print("\n❌ PIPELINE ABORTED: Data cleaning failed!")
+                print("\nPIPELINE ABORTED: Data cleaning failed!")
                 return False
             
             # Step 3-5: Run database loading
@@ -282,22 +293,22 @@ class DataPipelineOrchestrator:
             
             success = self.generate_final_report(results)
             
-            print(f"\n⏱️  TOTAL PIPELINE DURATION: {total_duration:.2f} seconds ({total_duration/60:.1f} minutes)")
+            print(f"\nTOTAL PIPELINE DURATION: {total_duration:.2f} seconds ({total_duration/60:.1f} minutes)")
             
             return success
             
         except KeyboardInterrupt:
-            print("\n\n⚠️  PIPELINE INTERRUPTED BY USER!")
+            print("\n\nPIPELINE INTERRUPTED BY USER!")
             return False
         except Exception as e:
-            print(f"\n❌ PIPELINE FAILED WITH ERROR: {e}")
+            print(f"\nPIPELINE FAILED WITH ERROR: {e}")
             return False
 
 def main():
     """Main function"""
     orchestrator = DataPipelineOrchestrator()
     
-    print("🎯 Starting Complete Data Pipeline...")
+    print("Starting Complete Data Pipeline...")
     print("This will:")
     print("  1. Clean all raw data files")
     print("  2. Load cleaned data into PostgreSQL")

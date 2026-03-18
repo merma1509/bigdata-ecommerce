@@ -236,7 +236,7 @@ class ScalableEcommerceModel:
             print("MongoDB activity schema created")
             
         except Exception as e:
-            print(f"⚠️ MongoDB schema creation warning: {e}")
+            print(f"MongoDB schema creation warning: {e}")
     
     def create_neo4j_graph_schema(self):
         """Create Neo4j graph schema for relationships and recommendations"""
