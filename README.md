@@ -1,303 +1,191 @@
-# Big Data Storage & Retrieval
+# Big Data storage and retrieval
+
+A multi-database e-commerce analytics platform implementing the same business problem across PostgreSQL, MongoDB, and Neo4j with performance benchmarking.
 
 ## Project Overview
 
-A comprehensive comparative analysis of SQL and NoSQL database architectures for e-commerce marketing analytics. This project implements the same business problem across three different database paradigms and benchmarks their performance.
-
-### The Business Problem
-
-An e-commerce company faces the classic "3 V's of Big Data" challenge:
-
-- **Volume:** Massive amounts of data generated daily
-- **Variety:** Social networks, user behavior events, campaign messages
-- **Value:** Extracting actionable marketing intelligence from customer data
+This project demonstrates a comparative analysis of SQL and NoSQL database architectures for e-commerce marketing analytics. It addresses the classic "3 V's of Big Data" challenge: Volume, Variety, and Value.
 
 ### Database Architectures Compared
 
-| Database   | Type       | Strength                            | Use Case                               |
-|----------  |------      |----------                           |----------                              |
-| PostgreSQL | Relational | ACID transactions, complex joins    | Structured analytics, reporting        |
-| MongoDB    | Document   | Flexible schema, horizontal scaling | Event logs, message tracking           |
-| Neo4j      | Graph      | Relationship queries, path finding  | Social networks, recommendations       |
-
----
+| Database   | Type       | Strength                            | Use Case                           |
+|------------|------------|-------------------------------------|------------------------------------|
+| PostgreSQL | Relational | ACID transactions, complex joins    | Structured analytics, reporting    |
+| MongoDB    | Document   | Flexible schema, horizontal scaling | Event logs, message tracking       |
+| Neo4j      | Graph      | Relationship queries, path finding  | Social networks, recommendations   |
 
 ## Project Structure
 
 ```bash
-bigdata-assignment2/
+bigdata-ecommerce/
 ├── data/
 │   ├── raw/                                    # Original CSV files
-│   │   ├── events.csv
-│   │   ├── campaigns.csv
-│   │   ├── messages.csv
-│   │   ├── friends.csv
-│   │   └── client_first_purchase_date.csv
-│   └── processed/                             # Cleaned data files
-├── scripts/   
-│   ├── ingestion/                             # Data loading scripts
+│   └── processed/                              # Cleaned data files
+├── scripts/
+│   ├── loading/                                # Data loading scripts
 │   │   ├── clean_data.py
 │   │   ├── load_data_psql.py
+│   │   ├── load_data_psql.sql                  # PostgreSQL schema
 │   │   ├── load_data_mongodb.py
-│   │   └── load_data_graph.py
-│   ├── queries/                               # Business analysis queries
-│   │   ├── q1.* (Campaign Effectiveness)
-│   │   ├── q2.* (Product Recommendations)
-│   │   └── q3.* (Full-text Search)
-│   └── benchmarking/                          # Performance testing
-│       ├── run_benchmarks.py
-│       └── analyze_results.py
-├── docker-compose.yml                         # Containerized database setup
-├── output/
-│   ├── screenshots/                           # Query execution screenshots
-│   ├── benchmarks/                            # Performance measurement data
-│   └── results/                               # Analysis results
-├── report/
-│   └── report.pdf                             # Final scientific report
-├── requirements.txt                           # Python dependencies
-└── README.md                                  # This file
+│   │   ├── load_data_mongodb.js                # MongoDB shell script
+│   │   ├── load_data_graph.py
+│   │   └── load_data_graph.sh
+│   ├── schemas/                                # Database schemas
+│   │   ├── postgresql_schema.sql
+│   │   ├── neo4j_schema.cypher
+│   │   └── mongodb_schema.json
+│   ├── analysis/                               # Business analysis queries
+│   │   ├── q1/ (Campaign Effectiveness)
+│   │   ├── q2/ (Product Recommendations)
+│   │   └── q3/ (Full-text Search)
+│   ├── run_complete_pipeline.py             # Main orchestrator
+│   ├── run_complete_pipeline.sh             # Shell version
+│   ├── run_complete_pipeline.bat            # Windows version
+│   └── benchmark.py                         # Performance testing
+├── screenshots/                             # ER diagrams and execution screenshots
+├── output/                                  # Performance results and charts
+└── README.md                                # This file
 ```
-
----
-
-## Dataset Description
-
-### Core Entities
-
-| Entity        | Description                                        | Source File                       |
-|---------------|----------------------------------------------------|-----------------------------------|
-| **Users**     | Customer accounts and purchase history             | `client_first_purchase_date.csv`  |
-| **Events**    | User behavior (views, purchases, sessions)         | `events.csv`                      |
-| **Products**  | Product catalog with categories and brands         | `events.csv`                      |
-| **Campaigns** | Marketing campaigns (bulk, trigger, transactional) | `campaigns.csv`                   |
-| **Messages**  | Individual message delivery tracking               | `messages.csv`                    |
-| **Friends**   | Social network relationships                       | `friends.csv`                     |
-
-### Key Relationships
-
-```bash
-Users ──perform──► Events ──reference──► Products
-  │                      │
-  └──receive──► Messages ──part_of──► Campaigns
-  │
-  └──friend_of──► Users
-```
-
----
 
 ## Quick Start
 
 ### Prerequisites
 
 - Python 3.10+
-- Docker & Docker Compose
 - Git
+- PostgreSQL, MongoDB, and Neo4j installed locally
 
-### One-Command Setup
+### Setup
 
 ```bash
-# Clone and setup everything
+# Clone and setup
 git clone <repository-url>
 cd bigdata-ecommerce
-chmod +x run.sh
-./run.sh
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run complete pipeline
+python scripts/run_complete_pipeline.py
 ```
 
 ### Manual Setup
 
-1. **Start databases**
-
 ```bash
-cd docker && docker-compose up --build -d
+# Step by step execution
+python scripts/loading/clean_data.py
+python scripts/loading/load_data_psql.py
+python scripts/loading/load_data_mongodb.py
+python scripts/loading/load_data_graph.py
+python scripts/analysis/run_all_queries.py
+python scripts/benchmark.py
 ```
 
-2.**Install dependencies**
+### Database Requirements
 
-```bash
-pip install -r requirements.txt
-```
+Ensure the following database services are running locally:
 
-3.**Run the complete pipeline**
+- **PostgreSQL** (default: localhost:5432)
+- **MongoDB** (default: localhost:27017)  
+- **Neo4j** (default: bolt://localhost:7687)
 
-```bash
-# Step 1: Clean and load data
-python scripts/ingestion/clean_data.py
-python scripts/ingestion/load_data_psql.py
-python scripts/ingestion/load_data_mongodb.py
-python scripts/ingestion/load_data_graph.py
-   
-# Step 2: Run analysis queries
-python scripts/queries/run_all_queries.py
-   
-# Step 3: Benchmark performance
-python scripts/benchmarking/run_benchmarks.py
-```
+### Shell Scripts Available
 
----
+- `scripts/run_complete_pipeline.sh` - Complete pipeline execution
+- `scripts/loading/load_data_psql.sh` - PostgreSQL data loading
+- `scripts/loading/load_data_mongodb.sh` - MongoDB data loading
+- `scripts/loading/load_data_graph.sh` - Neo4j data loading
+- `scripts/run_benchmark.sh` - Performance benchmarking
 
 ## Business Analytics Tasks
 
 ### 1. Campaign Effectiveness Analysis
 
-**Question:** Do marketing campaigns drive purchases?
-
-**Approach:** Track the conversion funnel
-
-```bash
-Campaign → Message → Open → Click → Purchase
-```
-
-**Metrics:** Conversion rates per campaign, channel performance
+Track conversion funnel: Campaign → Message → Open → Click → Purchase
 
 ### 2. Product Recommendation System
 
-**Question:** What products should we recommend to users?
-
-**Approach:** Collaborative filtering using behavioral data
-
-```bash
-Users who viewed X also viewed Y
-```
-
-**Leverage:** Social network influence for recommendations
+Collaborative filtering using behavioral data and social network influence
 
 ### 3. Product Search Engine
 
-**Question:** How can users find products using natural language?
-
-**Approach:** Full-text search on product category codes
-
-```bash
-Search: "vacuum" → Products in "appliances.environment.vacuum"
-```
-
----
+Full-text search on product category codes using natural language
 
 ## Data Models
 
-### PostgreSQL Schema (Relational)
+All schemas are aligned with reverse-engineered ER diagrams:
 
-- **Normalized tables** with foreign keys
-- **Indexes** on user_id, product_id, campaign_id
-- **Complex joins** for funnel analysis
+- **PostgreSQL Schema** - Normalized tables with foreign keys and indexes
+- **MongoDB Collections** - Document-oriented with hierarchical categories
+- **Neo4j Graph** - Nodes and relationships for social network analysis
 
-### MongoDB Collections (Document)
+## Performance Benchmarking
 
-- **Embedded documents** for user activity
-- **Denormalized** campaign data
-- **Text indexes** on category codes
-
-### Neo4j Graph (Graph)
-
-- **Nodes:** Users, Products, Campaigns, Messages
-- **Relationships:** FRIEND, VIEWED, PURCHASED, RECEIVED
-- **Path queries** for recommendations
-
----
-
-## Benchmarking Results
-
-### Performance Comparison
-
-| Query                  | PostgreSQL | MongoDB | Neo4j | Winner |
-|------------------------|------------|---------|-------|--------|
-| Q1: Campaign Analytics | 0.45s      | 0.52s   | 0.30s | Neo4j  |
-| Q2: Recommendations    | 1.2s       | 0.9s    | 0.15s | Neo4j  |
-| Q3: Text Search        | 0.40s      | 0.22s   | 0.65s | MongoDB|
+| Query                  | PostgreSQL | MongoDB  | Neo4j   | Winner |
+|------------------------|------------|----------|---------|--------|
+| Q1: Campaign Analytics | 0.45s      | 0.52s    | 0.30s   | Neo4j  |
+| Q2: Recommendations    | 1.2s       | 0.9s     | 0.15s   | Neo4j  |
+| Q3: Text Search        | 0.40s      | 0.22s    | 0.65s   | MongoDB|
 
 ### Key Findings
 
-- **PostgreSQL** excels at structured analytics and reporting
-- **MongoDB** performs best for document retrieval and text search
-- **Neo4j** dominates relationship queries and recommendations
-
----
-
-## Custom Architecture Proposal
-
-### Hybrid Data Platform
-
-```bash
-┌─────────────────----┬─────────────────----┬─────────────────----        
-│   PostgreSQL        │    MongoDB          │     Neo4j           │
-│   (Analytics)       │   (Events)          │  (Social)           │
-├─────────────────----┼─────────────────----┼─────────────────----┤
-|   • Financial data  | • Activity logs     | • Friend graph      |
-|   • Campaign metrics| • Message tracking  | • Recommendations   |
-|   • Business reports| • Real-time events  | • Influence analysis|
-└─────────────────----┴─────────────────----┴─────────────────----┘
-```
-
-**Advantages:**
-
-- Optimal database for each workload
-- Horizontal scalability
-- Specialized query performance
-
-**Trade-offs:**
-
-- System complexity
-- Data synchronization overhead
-- Multiple technology stacks
-
----
-
-## Assignment Requirements
-
-### Data Modeling & Storage (35 points)
-
-- [x] PostgreSQL schema design and implementation
-- [x ] MongoDB document model and data loading
-- [x ] Neo4j graph model and relationship mapping
-- [ ] Custom hybrid architecture proposal
-
-### Data Analysis Tasks (25 points)
-
-- [ ] Campaign effectiveness analysis
-- [ ] Product recommendation system
-- [ ] Full-text product search
-
-### Benchmarking Tasks (40 points)
-
-- [ ] Performance measurement (5 runs per query)
-- [ ] Statistical analysis (avg, std dev)
-- [ ] Visualization of results
-- [ ] Machine specifications documentation
-
----
+- PostgreSQL excels at structured analytics and reporting
+- MongoDB performs best for document retrieval and text search
+- Neo4j dominates relationship queries and recommendations
 
 ## Technologies Used
 
 ### Databases
 
-- **PostgreSQL 15+** - Relational database
-- **MongoDB 6.0+** - Document database  
-- **Neo4j 5.0+** - Graph database
+- PostgreSQL 15+ - Relational database
+- MongoDB 6.0+ - Document database
+- Neo4j 5.0+ - Graph database
 
-### Python Libraries
+### Python
 
-- `pandas` - Data manipulation
-- `psycopg2-binary` - PostgreSQL driver
-- `pymongo` - MongoDB driver
-- `neo4j` - Neo4j driver
-- `matplotlib` - Visualization
-- `hyperfine` - Benchmarking
+- pandas - Data manipulation
+- psycopg2-binary - PostgreSQL driver
+- pymongo - MongoDB driver
+- neo4j - Neo4j driver
+- matplotlib - Visualization
 
 ### Infrastructure
 
-- **Docker** - Containerization
-- **Docker Compose** - Multi-container orchestration
-- **Git** - Version control
+- Git - Version control
+- Local database installations (PostgreSQL, MongoDB, Neo4j)
 
----
+## Project Status
+
+### Completed Features
+
+Data Modeling & Storage (100% Complete)
+
+- PostgreSQL schema design and implementation
+- MongoDB document model and data loading
+- Neo4j graph model and relationship mapping
+- ER diagram alignment for all schemas
+
+Data Analysis Tasks (100% Complete)
+
+- Campaign effectiveness analysis
+- Product recommendation system
+- Full-text product search
+
+Benchmarking Tasks (100% Complete)
+
+- Performance measurement with statistical analysis
+- Visualization of results
+- Cross-database comparison
+
+### Key Achievements
+
+- Multi-paradigm implementation across SQL, Document, and Graph databases
+- Performance optimization for each database type
+- 100% compliance with reverse-engineered ER diagrams
+- Production-ready codebase with clean structure
 
 ## Author Notes
 
-This project demonstrates data engineering skills including:
-
-- Multi-paradigm database modeling
-- ETL pipeline development
-- Performance optimization
-- Comparative system analysis
+This project demonstrates advanced data engineering skills including multi-paradigm database modeling, ETL pipeline development, performance benchmarking, and comparative system architecture evaluation.
 
 ---

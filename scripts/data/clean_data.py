@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Final Data Cleaning Script with Context-Aware DateTime Handling
-Cleans and prepares data with appropriate datetime replacements based on dataset context
-"""
+"""Data Cleaning Script - Cleans and prepares data"""
 
 import pandas as pd
 import numpy as np
@@ -12,7 +9,7 @@ import sys
 
 def clean_campaigns_data():
     """Clean campaigns.csv data with context-aware datetime handling"""
-    print("🧹 Cleaning campaigns data (with proper datetime handling)...")
+    print("Cleaning campaigns data (with proper datetime handling)...")
     
     df = pd.read_csv('data/raw/campaigns.csv')
     
@@ -52,15 +49,15 @@ def clean_campaigns_data():
     
     # Save cleaned data with explicit handling
     df.to_csv('data/processed/campaigns_cleaned.csv', index=False, na_rep='unknown')
-    print(f"✅ Cleaned campaigns data: {len(df)} records")
-    print(f"  🗑️  Removed {duplicates_removed} duplicate campaign IDs")
-    print(f"  📅 Default datetime: {default_campaign_date}")
+    print(f"Cleaned campaigns data: {len(df)} records")
+    print(f"  Removed {duplicates_removed} duplicate campaign IDs")
+    print(f"  Default datetime: {default_campaign_date}")
     
     return df
 
 def clean_events_data():
     """Clean events.csv data with context-aware datetime handling"""
-    print("🧹 Cleaning events data (with proper datetime handling)...")
+    print("Cleaning events data (with proper datetime handling)...")
     
     # Read in chunks due to large file size
     chunk_size = 100000
@@ -102,15 +99,15 @@ def clean_events_data():
     
     # Save cleaned data with explicit handling of missing values
     df.to_csv('data/processed/events_cleaned.csv', index=False, na_rep='unknown')
-    print(f"✅ Cleaned events data: {len(df)} records")
-    print(f"  🗑️  Removed {duplicates_removed:,} duplicate events")
-    print(f"  📅 Default datetime: {default_event_date}")
+    print(f"Cleaned events data: {len(df)} records")
+    print(f"  Removed {duplicates_removed:,} duplicate events")
+    print(f"  Default datetime: {default_event_date}")
     
     return df
 
 def clean_friends_data():
     """Clean friends.csv data with duplicate removal"""
-    print("🧹 Cleaning friends data...")
+    print("Cleaning friends data...")
     
     # Read in chunks due to large file size
     chunk_size = 100000
@@ -139,14 +136,14 @@ def clean_friends_data():
     
     # Save cleaned data
     df.to_csv('data/processed/friends_cleaned.csv', index=False)
-    print(f"✅ Cleaned friends data: {len(df)} records")
-    print(f"  🗑️  Removed {duplicates_removed:,} reverse duplicate friendships")
+    print(f"Cleaned friends data: {len(df)} records")
+    print(f"  Removed {duplicates_removed:,} reverse duplicate friendships")
     
     return df
 
 def clean_messages_data():
     """Clean messages.csv data with context-aware datetime handling"""
-    print("🧹 Cleaning messages data (with proper datetime handling)...")
+    print("Cleaning messages data (with proper datetime handling)...")
     
     # Read in chunks due to large file size
     chunk_size = 100000
@@ -200,15 +197,15 @@ def clean_messages_data():
     
     # Save cleaned data with explicit handling
     df.to_csv('data/processed/messages_cleaned.csv', index=False, na_rep='unknown')
-    print(f"✅ Cleaned messages data: {len(df)} records")
-    print(f"  🗑️  Removed {duplicates_removed:,} duplicate messages")
-    print(f"  📅 Default datetime: {default_message_date}")
+    print(f"Cleaned messages data: {len(df)} records")
+    print(f"  Removed {duplicates_removed:,} duplicate messages")
+    print(f"  Default datetime: {default_message_date}")
     
     return df
 
 def clean_client_purchase_data():
     """Clean client_first_purchase_date.csv data with context-aware datetime handling"""
-    print("🧹 Cleaning client purchase data (with proper datetime handling)...")
+    print("Cleaning client purchase data (with proper datetime handling)...")
     
     df = pd.read_csv('data/raw/client_first_purchase_date.csv')
     print(f"  Original records: {len(df):,}")
@@ -228,9 +225,9 @@ def clean_client_purchase_data():
     
     # Save cleaned data
     df.to_csv('data/processed/client_purchase_cleaned.csv', index=False, na_rep='unknown')
-    print(f"✅ Cleaned client purchase data: {len(df)} records")
-    print(f"  🗑️  Removed {duplicates_removed} duplicate client IDs")
-    print(f"  📅 Default datetime: {default_purchase_date}")
+    print(f"Cleaned client purchase data: {len(df)} records")
+    print(f"  Removed {duplicates_removed} duplicate client IDs")
+    print(f"  Default datetime: {default_purchase_date}")
     
     return df
 
@@ -257,34 +254,34 @@ def create_data_summary():
     with open('data/processed/data_summary.txt', 'w') as f:
         f.write("Data Cleaning Summary - CONTEXT-AWARE DATETIME HANDLING\n")
         f.write("=" * 55 + "\n\n")
-        f.write("✅ ALL DATASETS PROPERLY CLEANED - NO NULLS, NO DUPLICATES\n\n")
+        f.write("ALL DATASETS PROPERLY CLEANED - NO NULLS, NO DUPLICATES\n\n")
         for line in summary:
             f.write(line + "\n")
         
-        f.write("\n📅 DATETIME REPLACEMENT STRATEGY:\n")
+        f.write("\nDATETIME REPLACEMENT STRATEGY:\n")
         f.write("• Events (Oct-Dec 2019): Missing dates → 2019-10-01\n")
         f.write("• Campaigns (2021): Missing dates → 2021-04-01\n")
         f.write("• Messages (2021): Missing dates → 2021-05-01\n")
         f.write("• Client Purchases (2021-2023): Missing dates → 2022-06-01\n")
         
-        f.write("\n🗑️ DUPLICATE REMOVAL STRATEGIES:\n")
+        f.write("\nDUPLICATE REMOVAL STRATEGIES:\n")
         f.write("• Campaigns: Removed duplicate campaign IDs (kept first occurrence)\n")
         f.write("• Events: Removed duplicate user+product+time+event_type combinations\n")
         f.write("• Friends: Removed reverse duplicate friendships (A-B vs B-A)\n")
         f.write("• Messages: No duplicates found in original data\n")
         f.write("• Client Purchases: No duplicates found in original data\n")
         
-        f.write("\n🎯 MISSING VALUE HANDLING:\n")
+        f.write("\nMISSING VALUE HANDLING:\n")
         f.write("• Missing strings replaced with explicit 'unknown' values\n")
         f.write("• DateTime nulls replaced with context-appropriate dates\n")
         f.write("• Boolean nulls replaced with False values\n")
         f.write("• Numeric nulls replaced with 0 values\n")
         
-        f.write("\n✅ PRODUCTION READY FOR HACKOLADE DATA MODELING!\n")
+        f.write("\nPRODUCTION READY FOR HACKOLADE DATA MODELING!\n")
 
 def main():
     """Main cleaning function"""
-    print("🚀 STARTING FINAL DATA CLEANING WITH CONTEXT-AWARE DATETIME HANDLING")
+    print("STARTING FINAL DATA CLEANING WITH CONTEXT-AWARE DATETIME HANDLING")
     print("=" * 70)
     
     # Create processed directory if it doesn't exist
@@ -301,11 +298,11 @@ def main():
     create_data_summary()
     
     print("\n" + "=" * 70)
-    print("🎉 FINAL DATA CLEANING COMPLETED SUCCESSFULLY!")
-    print("✅ All null values removed")
-    print("🗑️  All duplicates removed")
-    print("📅 Context-aware datetime replacements applied")
-    print("🎯 Data ready for Hackolade data modeling!")
+    print("FINAL DATA CLEANING COMPLETED SUCCESSFULLY!")
+    print("All null values removed")
+    print("All duplicates removed")
+    print("Context-aware datetime replacements applied")
+    print("Data ready for Hackolade data modeling!")
     print("=" * 70)
 
 if __name__ == "__main__":

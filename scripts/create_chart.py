@@ -9,7 +9,7 @@ def create_performance_chart():
     """Create performance chart similar to reference paper"""
     
     # Load results
-    with open('benchmark_results.json', 'r') as f:
+    with open('output/final_benchmark_results.json', 'r') as f:
         data = json.load(f)
     
     # Extract data
@@ -21,12 +21,12 @@ def create_performance_chart():
     q2_std = []
     q3_std = []
     
-    for db_name, db_data in data['benchmark_results'].items():
+    for db_name, db_data in data['results'].items():
         databases.append(db_name.upper())
         
-        q1_stats = db_data['q1']['statistics']
-        q2_stats = db_data['q2']['statistics']
-        q3_stats = db_data['q3']['statistics']
+        q1_stats = db_data['q1']
+        q2_stats = db_data['q2']
+        q3_stats = db_data['q3']
         
         q1_means.append(q1_stats['mean'])
         q2_means.append(q2_stats['mean'])
@@ -71,10 +71,10 @@ def create_performance_chart():
     add_value_labels(bars3)
     
     plt.tight_layout()
-    plt.savefig('performance_chart.png', dpi=300, bbox_inches='tight')
+    plt.savefig('output/performance_chart.png', dpi=300, bbox_inches='tight')
     plt.show()
     
-    print("Performance chart saved as 'performance_chart.png'")
+    print("Performance chart saved as 'output/performance_chart.png'")
 
 if __name__ == "__main__":
     create_performance_chart()
