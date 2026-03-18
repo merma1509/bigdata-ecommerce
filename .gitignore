@@ -6,18 +6,13 @@ __pycache__/
 # Jupyter Notebooks
 .ipynb_checkpoints
 
-# Data files (too large for git)
+# Data files
 data/raw/*.csv
 data/processed/*.csv
 
-# Output and results
-output/
-screenshots/
 results/
 benchmarks/
 docs/
-hyperfine_results.json
-hyperfine_report.md
 notebooks/
 
 # Logs
@@ -50,8 +45,4 @@ secrets/
 # uv
 uv.lock
 uv-x86_64-unknown-linux-gnu/
-
-# Benchmark results
-benchmark_results.json
-performance_chart.png
 
