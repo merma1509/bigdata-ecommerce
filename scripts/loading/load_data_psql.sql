@@ -59,7 +59,8 @@ CREATE TABLE events (
     category_id TEXT,
     price DECIMAL(20,2),
     user_session VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (event_time, user_id, product_id, event_type)
 ) WITH (fillfactor=100);
 
 -- User Friends relationship table
@@ -74,6 +75,7 @@ CREATE TABLE user_friends (
 -- Messages table for campaign interactions
 CREATE TABLE messages (
     message_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    message_uuid TEXT UNIQUE NOT NULL,
     user_id TEXT NOT NULL,
     campaign_id BIGINT NOT NULL,
     message_type VARCHAR(100),

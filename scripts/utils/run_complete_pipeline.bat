@@ -2,7 +2,7 @@
 REM Complete Data Pipeline Runner (Windows)
 REM Cleans raw data and loads into PostgreSQL, MongoDB, and Neo4j
 
-echo 🚀 BIG DATA STORAGE & RETRIEVAL - COMPLETE PIPELINE
+echo BIG DATA STORAGE & RETRIEVAL - COMPLETE PIPELINE
 echo ==================================================
 echo This script will:
 echo   1. Clean all raw data files
@@ -14,7 +14,7 @@ echo ==================================================
 REM Check if Python is available
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo ❌ Error: Python is not installed
+    echo Error: Python is not installed
     pause
     exit /b 1
 )
@@ -29,7 +29,7 @@ REM Check exit status
 if errorlevel 1 (
     echo.
     echo ==================================================
-    echo ❌ PIPELINE FAILED!
+    echo PIPELINE FAILED!
     echo Check error messages above for details.
     echo ==================================================
     pause
@@ -37,7 +37,7 @@ if errorlevel 1 (
 ) else (
     echo.
     echo ==================================================
-    echo 🎉 COMPLETE PIPELINE EXECUTED SUCCESSFULLY!
+    echo COMPLETE PIPELINE EXECUTED SUCCESSFULLY!
     echo All data cleaned and loaded into all three databases!
     echo ==================================================
     pause

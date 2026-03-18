@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-03-18T17:17:50.419375",
+  "key_insights": [
+    "\ud83c\udfaf Best performing campaign: transactional via email with 9.0% conversion rate",
+    "\ud83d\udecd\ufe0f Top performing brand: apple with highest revenue potential",
+    "\ud83d\udd0d Most searched category: electronics.phone with 15,600 searches"
+  ],
+  "recommendations": [
+    "Focus on trigger campaigns via email for highest conversion rates",
+    "Prioritize apple products in recommendation engine",
+    "Optimize product listings for high-volume search categories"
+  ],
+  "data_highlights": {
+    "campaigns": {
+      "total_campaigns": 5,
+      "avg_conversion": 7.0,
+      "best_channel": "push"
+    },
+    "products": {
+      "total_products": 15,
+      "top_brand": "apple",
+      "avg_price": 504.6246666666667,
+      "total_revenue_potential": 18800274.69
+    },
+    "search": {
+      "total_categories": 10,
+      "total_search_volume": "85200",
+      "hottest_category": "electronics.phone",
+      "avg_category_price": 242.28199999999998
+    }
+  }
+}

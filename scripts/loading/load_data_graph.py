@@ -260,7 +260,7 @@ class SuperFastNeo4jLoader:
                 print("Loading messages...")
                 messages_file = project_root / 'data/processed/messages_cleaned.csv'
                 messages_count = 0
-                chunk_size = 100000  #  for faster loading
+                chunk_size = 50000  # Large chunks for complete loading
                 
                 for chunk in pd.read_csv(messages_file, chunksize=chunk_size):
                     messages_data = []
@@ -297,7 +297,7 @@ class SuperFastNeo4jLoader:
                                 MERGE (c)-[:PART_OF_CAMPAIGN]->(m)
                             """, messages=messages_data)
                         messages_count += len(messages_data)
-                        print(f"    Processed {messages_count} messages (100K chunk optimization)...")
+                        print(f"    Processed {messages_count} messages...")
                 
                 print(f"  Loaded {messages_count} messages")
                 

@@ -74,7 +74,13 @@ class SuperFastMongoLoader:
                 categories.append(category)
             
             if categories:
-                self.db.categories.insert_many(categories, ordered=False)
+                # Use bulk upsert to avoid duplicates
+                for category in categories:
+                    self.db.categories.update_one(
+                        {'category_id': category['category_id']},
+                        {'$setOnInsert': category},
+                        upsert=True
+                    )
                 print(f"  Loaded {len(categories)} categories")
             
             # Load products
@@ -96,7 +102,13 @@ class SuperFastMongoLoader:
                 products.append(product)
             
             if products:
-                self.db.products.insert_many(products, ordered=False)
+                # Use bulk upsert to avoid duplicates
+                for product in products:
+                    self.db.products.update_one(
+                        {'product_id': product['product_id']},
+                        {'$setOnInsert': product},
+                        upsert=True
+                    )
                 print(f"  Loaded {len(products)} products")
             
             # Load users
@@ -116,7 +128,13 @@ class SuperFastMongoLoader:
                 users.append(user)
             
             if users:
-                self.db.users.insert_many(users, ordered=False)
+                # Use bulk upsert to avoid duplicates
+                for user in users:
+                    self.db.users.update_one(
+                        {'user_id': user['user_id']},
+                        {'$setOnInsert': user},
+                        upsert=True
+                    )
                 print(f"  Loaded {len(users)} users")
             
             # Load campaigns
@@ -139,7 +157,13 @@ class SuperFastMongoLoader:
                 campaigns.append(campaign)
             
             if campaigns:
-                self.db.campaigns.insert_many(campaigns, ordered=False)
+                # Use bulk upsert to avoid duplicates
+                for campaign in campaigns:
+                    self.db.campaigns.update_one(
+                        {'campaign_id': campaign['campaign_id']},
+                        {'$setOnInsert': campaign},
+                        upsert=True
+                    )
                 print(f"  Loaded {len(campaigns)} campaigns")
             
             # Load events - SUPER CHUNKS
@@ -168,7 +192,13 @@ class SuperFastMongoLoader:
                     events.append(event)
                 
                 if events:
-                    self.db.events.insert_many(events, ordered=False)
+                    # Use bulk upsert to avoid duplicates
+                    for event in events:
+                        self.db.events.update_one(
+                            {'event_time': event['event_time'], 'user_id': event['user_id'], 'product_id': event['product_id'], 'event_type': event['event_type']},
+                            {'$setOnInsert': event},
+                            upsert=True
+                        )
                     events_count += len(events)
                     print(f"    Processed {events_count} events...")
             
@@ -192,7 +222,13 @@ class SuperFastMongoLoader:
                     friends.append(friend)
                 
                 if friends:
-                    self.db.friends.insert_many(friends, ordered=False)
+                    # Use bulk upsert to avoid duplicates
+                    for friend in friends:
+                        self.db.user_friends.update_one(
+                            {'user_id': friend['user_id'], 'friend_id': friend['friend_id']},
+                            {'$setOnInsert': friend},
+                            upsert=True
+                        )
                     friends_count += len(friends)
                     print(f"    Processed {friends_count} friend relationships...")
             
@@ -232,7 +268,13 @@ class SuperFastMongoLoader:
                     messages.append(message)
                 
                 if messages:
-                    self.db.messages.insert_many(messages, ordered=False)
+                    # Use bulk upsert to avoid duplicates
+                    for message in messages:
+                        self.db.messages.update_one(
+                            {'message_uuid': message['message_uuid']},
+                            {'$setOnInsert': message},
+                            upsert=True
+                        )
                     messages_count += len(messages)
                     print(f"    Processed {messages_count} messages...")
             

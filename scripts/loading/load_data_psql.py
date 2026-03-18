@@ -162,6 +162,7 @@ class SuperFastPostgreSQLLoader:
                 cursor.executemany("""
                     INSERT INTO categories (category_id, category_code, category_name)
                     VALUES (%s, %s, %s)
+                    ON CONFLICT (category_id) DO NOTHING
                 """, categories_data)
                 categories_count = cursor.rowcount
                 conn.commit()
@@ -178,6 +179,7 @@ class SuperFastPostgreSQLLoader:
                 cursor.executemany("""
                     INSERT INTO products (product_id, category_id, brand, price)
                     VALUES (%s, %s, %s, %s)
+                    ON CONFLICT (product_id) DO NOTHING
                 """, products_data)
                 products_count = cursor.rowcount
                 conn.commit()
@@ -194,6 +196,7 @@ class SuperFastPostgreSQLLoader:
                 cursor.executemany("""
                     INSERT INTO users (user_id, client_id, user_device_id, first_purchase_date)
                     VALUES (%s, %s, %s, %s)
+                    ON CONFLICT (user_id) DO NOTHING
                 """, users_data)
                 users_count = cursor.rowcount
                 conn.commit()
@@ -219,6 +222,7 @@ class SuperFastPostgreSQLLoader:
                 cursor.executemany("""
                     INSERT INTO campaigns (campaign_id, campaign_type, channel, topic, started_at, finished_at, total_count)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (campaign_id) DO NOTHING
                 """, campaigns_data)
                 campaigns_count = cursor.rowcount
                 conn.commit()
@@ -243,6 +247,7 @@ class SuperFastPostgreSQLLoader:
                     cursor.executemany("""
                         INSERT INTO events (event_time, event_type, user_id, product_id, category_id, price, user_session)
                         VALUES (%s, %s, %s, %s, %s, %s, %s)
+                        ON CONFLICT (event_time, user_id, product_id, event_type) DO NOTHING
                     """, events_data)
                     events_count += cursor.rowcount
                     conn.commit()
@@ -263,6 +268,7 @@ class SuperFastPostgreSQLLoader:
                     cursor.executemany("""
                         INSERT INTO user_friends (user_id, friend_id)
                         VALUES (%s, %s)
+                        ON CONFLICT (user_id, friend_id) DO NOTHING
                     """, friends_data)
                     friends_count += cursor.rowcount
                     conn.commit()
@@ -294,6 +300,7 @@ class SuperFastPostgreSQLLoader:
                     cursor.executemany("""
                         INSERT INTO messages (message_uuid, user_id, campaign_id, message_type, channel, date, sent_at, is_opened, is_clicked, is_purchased)
                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ON CONFLICT (message_uuid) DO NOTHING
                     """, messages_data)
                     messages_count += cursor.rowcount
                     conn.commit()
